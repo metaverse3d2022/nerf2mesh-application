@@ -138,7 +138,10 @@ class NeRFRenderer(nn.Module):
                 if os.path.exists(_updated_mesh_path) and self.opt.ckpt != 'scratch':
                     mesh = trimesh.load(_updated_mesh_path, force='mesh', skip_material=True, process=False)
                 else: # base (not updated)
-                    mesh = trimesh.load(os.path.join(self.opt.workspace, 'mesh_stage0', f'mesh_{cas}.ply'), force='mesh', skip_material=True, process=False)
+                    try:
+                        mesh = trimesh.load(os.path.join(self.opt.workspace, 'mesh_stage0', f'mesh_{cas}.ply'), force='mesh', skip_material=True, process=False)
+                    except:
+                        print(f"[WARNING] mesh_stage0/mesh_{cas}.ply is not existed!!!")
                 print(f'[INFO] loaded cascade {cas} mesh: {mesh.vertices.shape}, {mesh.faces.shape}')
 
                 vertices.append(mesh.vertices)
